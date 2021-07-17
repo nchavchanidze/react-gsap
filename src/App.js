@@ -3,7 +3,6 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import { TweenMax, Power3 } from "gsap";
-import userEvent from "@testing-library/user-event";
 
 function App() {
   let logoItem = useRef(null)
