@@ -1,44 +1,32 @@
-import React, { useRef, useEffect, useState } from "react";
-import { TweenMax, Power3 } from "gsap";
-import "./App.css";
+import React, { useRef, useEffect } from "react"
+import "./App.scss"
+import People from "./img/people.jpg"
+import CSSRulePlugin from "gsap/CSSRulePlugin"
+import { TimelineLite, Power2 } from "gsap"
 
+const App = () => {
+  let container = useRef(null)
+  let image = useRef(null)
+  let imageReveal = CSSRulePlugin.getRule(".img-container:after")
 
-function App() {
-  let app = useRef(null)
-  let circle = useRef(null)
-  let circleRed = useRef(null)
-  let circleBlue = useRef(null)
-
-  const [circleSize, setCircleSize] = useState(false)
-
-  const handleExpand = () => {
-    TweenMax.to(circleRed, .8, {width: 200, height: 200, ease: Power3.easeInOut})
-    setCircleSize(true)
-  }
-  const handleShrink = () => {
-    TweenMax.to(circleRed, .8, {width: 75, height: 75, ease: Power3.easeInOut})
-    setCircleSize(false)
-  }
+  const tl = new TimelineLite()
 
   useEffect(() => {
-    TweenMax.to(app, 0, {css: {visibility: 'visible'}})
-    // TweenMax.from(circle, .8, {opacity: 0, x: 40, ease: Power3.easeOut})
-    // TweenMax.from(circleRed, .8, {opacity: 0, x: 40, ease: Power3.easeOut, delay: .2})
-    // TweenMax.from(circleBlue, .8, {opacity: 0, x: 40, ease: Power3.easeOut, delay: .4})
-    TweenMax.staggerFrom([circle, circleRed, circleBlue], .8, {opacity: 0, x: 40, ease: Power3.easeOut}, .2)
-  }, [])
-
+    tl.to(container, 0, { css: { visibility: "visible" } })
+      .to(imageReveal, 1.4, { width: "0%", ease: Power2.easeInOut })
+      .from(image, 1.4, { scale: 1.6, ease: Power2.easeInOut, delay: -1.6 })
+  })
   return (
-    <div ref={el => app = el} className="App">
-      <header className="App-header">
-        <div className="circle-container">
-          <div ref={el => circle = el} className="circle"></div>
-          <div onClick={circleSize !== true ? handleExpand : handleShrink} ref={el => circleRed = el} className="circle red"></div>
-          <div ref={el => circleBlue = el} className="circle blue"></div>
-        </div>
-      </header>
-    </div>
-  );
+    <section className="main">
+      <div ref={(el) => (container = el)} className="container">
+        <>
+          <div className="img-container">
+            <img ref={(el) => (image = el)} src={People} alt="people" />
+          </div>
+        </>
+      </div>
+    </section>
+  )
 }
 
-export default App;
+export default App
